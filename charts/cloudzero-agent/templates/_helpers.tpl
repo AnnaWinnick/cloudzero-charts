@@ -352,7 +352,7 @@ Name for the backfill job resource
 */}}
 {{- define "cloudzero-agent.initBackfillJobName" -}}
 {{- $name := printf "%s-backfill-%s" .Release.Name .Chart.Version }}
-{{- $imageRef := splitList ":" (include  "cloudzero-agent.initScrapeJob.imageReference" .) | last }}
+{{- $imageRef := splitList ":" (include  "cloudzero-agent.initBackfillJob.imageReference" .) | last }}
 {{- printf "%s-%s" $name ($imageRef | trunc 8) | trunc 63 | replace "." "-" }}
 {{- end }}
 

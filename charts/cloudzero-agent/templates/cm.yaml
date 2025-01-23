@@ -17,11 +17,11 @@ data:
     global:
       scrape_interval: {{ .Values.prometheusConfig.globalScrapeInterval }}
     scrape_configs:
-      {{- if .Values.prometheusConfig.backfillJobs.kubeStateMetrics.enabled }}
+      {{- if .Values.prometheusConfig.scrapeJobs.kubeStateMetrics.enabled }}
       - job_name: static-kube-state-metrics
         honor_timestamps: true
         track_timestamps_staleness: false
-        scrape_interval: {{ .Values.prometheusConfig.backfillJobs.kubeStateMetrics.scrapeInterval }}
+        scrape_interval: {{ .Values.prometheusConfig.scrapeJobs.kubeStateMetrics.scrapeInterval }}
         scrape_timeout: 10s
         scrape_protocols:
         - OpenMetricsText1.0.0
@@ -67,11 +67,11 @@ data:
         - targets:
             - {{ include "cloudzero-agent.kubeStateMetrics.kubeStateMetricsSvcTargetName" . }}
       {{- end }}
-      {{- if .Values.prometheusConfig.backfillJobs.cadvisor.enabled }}
+      {{- if .Values.prometheusConfig.scrapeJobs.cadvisor.enabled }}
       - job_name: cloudzero-nodes-cadvisor # container_* metrics
         honor_timestamps: true
         track_timestamps_staleness: false
-        scrape_interval: {{ .Values.prometheusConfig.backfillJobs.cadvisor.scrapeInterval }}
+        scrape_interval: {{ .Values.prometheusConfig.scrapeJobs.cadvisor.scrapeInterval }}
         scrape_timeout: 10s
         scrape_protocols:
         - OpenMetricsText1.0.0
@@ -142,9 +142,9 @@ data:
             regex: "^({{ join "|" .Values.insightsMetrics }})$"
             action: keep
       {{- end }}
-      {{- if .Values.prometheusConfig.backfillJobs.prometheus.enabled }}
+      {{- if .Values.prometheusConfig.scrapeJobs.prometheus.enabled }}
       - job_name: static-prometheus
-        scrape_interval: {{ .Values.prometheusConfig.backfillJobs.prometheus.scrapeInterval }}
+        scrape_interval: {{ .Values.prometheusConfig.scrapeJobs.prometheus.scrapeInterval }}
         static_configs:
           - targets:
               - localhost:9090
@@ -154,8 +154,8 @@ data:
             regex: "^({{ join "|" .Values.prometheusMetrics }})$"
             action: keep
       {{- end }}
-      {{- if .Values.prometheusConfig.backfillJobs.additionalBackfillJobs -}}
-      {{ toYaml .Values.prometheusConfig.backfillJobs.additionalBackfillJobs | toString | nindent 6 }}
+      {{- if .Values.prometheusConfig.scrapeJobs.additionalScrapeJobs -}}
+      {{ toYaml .Values.prometheusConfig.scrapeJobs.additionalScrapeJobs | toString | nindent 6 }}
       {{- end}}
   {{- end}}
     remote_write:

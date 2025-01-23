@@ -148,7 +148,7 @@ serverConfig:
   # -- The agent will look for a file with this name to get the CZ API key.
   containerSecretFileName: value
 
-initScrapeJob:
+initBackfillJob:
   # -- By default, all image settings use those set in insightsController.server. Optionally use the below to override. This should not be common.
   # imagePullSecrets: []
   # image:

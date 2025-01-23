@@ -211,8 +211,8 @@ app.kubernetes.io/component: {{ .Values.insightsController.server.name }}
 {{ include "cloudzero-agent.common.matchLabels" . }}
 {{- end -}}
 
-{{- define "cloudzero-agent.insightsController.initScrapeJob.matchLabels" -}}
-app.kubernetes.io/component: {{ include "cloudzero-agent.initScrapeJobName" . }}
+{{- define "cloudzero-agent.insightsController.initBackfillJob.matchLabels" -}}
+app.kubernetes.io/component: {{ include "cloudzero-agent.initBackfillJobName" . }}
 {{ include "cloudzero-agent.common.matchLabels" . }}
 {{- end -}}
 
@@ -238,10 +238,10 @@ imagePullSecrets:
 imagePullSecrets for the insights controller init scrape job.
 Defaults to given value, then the insightsController value, then the top level value
 */}}
-{{- define "cloudzero-agent.initScrapeJob.imagePullSecrets" -}}
-{{- if .Values.initScrapeJob.imagePullSecrets -}}
+{{- define "cloudzero-agent.initBackfillJob.imagePullSecrets" -}}
+{{- if .Values.initBackfillJob.imagePullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.initScrapeJob.imagePullSecrets | indent 2 }}
+{{ toYaml .Values.initBackfillJob.imagePullSecrets | indent 2 }}
 {{- else if .Values.insightsController.server.imagePullSecrets -}}
 imagePullSecrets:
 {{ toYaml .Values.insightsController.server.imagePullSecrets | indent 2 }}
@@ -272,14 +272,14 @@ imagePullSecrets:
 {{/*
 Get the full container image reference for the init scrape job pod
 */}}
-{{- define "cloudzero-agent.initScrapeJob.imageReference" -}}
+{{- define "cloudzero-agent.initBackfillJob.imageReference" -}}
 {{- $repository := .Values.insightsController.server.image.repository -}}
 {{ $tag := .Values.insightsController.server.image.tag -}}
-{{- if and .Values.initScrapeJob.image .Values.initScrapeJob.image.repository -}}
-{{- $repository = .Values.initScrapeJob.image.repository }}
+{{- if and .Values.initBackfillJob.image .Values.initBackfillJob.image.repository -}}
+{{- $repository = .Values.initBackfillJob.image.repository }}
 {{- end }}
-{{- if and .Values.initScrapeJob.image .Values.initScrapeJob.image.tag -}}
-{{- $tag = .Values.initScrapeJob.image.tag -}}
+{{- if and .Values.initBackfillJob.image .Values.initBackfillJob.image.tag -}}
+{{- $tag = .Values.initBackfillJob.image.tag -}}
 {{- end }}
 {{- printf "%s:%s" $repository $tag }}
 {{- end }}
@@ -350,7 +350,7 @@ Name for the issuer resource
 {{/*
 Name for the job resource
 */}}
-{{- define "cloudzero-agent.initScrapeJobName" -}}
+{{- define "cloudzero-agent.initBackfillJobName" -}}
 {{- printf "%s-init-scrape" (include "cloudzero-agent.insightsController.server.webhookFullname" .) }}
 {{- end }}
 
